@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="Pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oliveira Materiais</title>
+</head>
+<style>
+    img{border-radius: 10px 10px;}
+    .product {
+        border: 3px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        text-align: center;
+        width: 250px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .product:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .product img {
+        max-width: 100%;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+    
+    .product-info {
+        margin-top: 10px;
+    }
+    
+    .product-info h3 {
+        font-size: 18px;
+        margin: 10px 0;
+    }
+    
+    .product-info p {
+        margin: 5px 0;
+    }
+    
+    .product-info .price {
+        font-weight: bold;
+        color: #007BFF;
+        margin: 10px 0;
+    }
+    
+    .product-info button {
+        padding: 10px 15px;
+        border: none;
+        width: 200px;
+        background-color: black;
+        color: white;
+        border-radius: 10px 10px;
+        cursor: pointer;
+        font-size: 14px;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        transition: background-color 0.3s ease;
+    }
+    .product-info button:hover {
+        background-color: red;
+    }
+    
+    .product-info button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding-bottom: 100px;
+        }
+        header {
+            padding: 10px 20px;
+            text-align: center;
+        }
+        .categories{display: flex;justify-content: center;gap: 4px;width: 50px;margin: auto;}
+        .categories button{padding: 10px;border: none;background-color: black;color: white;cursor: pointer;
+        font-size: 16px;
+        border-radius: 5px;transition: background-color 0.3s ease;font-size: 20px;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;}
+        .categories button:hover{background-color: aliceblue;color: red;transform: scale(1.09);}
+        nav{background-color: whitesmoke;}
+        #search-bar {
+            margin: 20px auto;
+            width: 90%;
+            border-radius: 10px 10px;
+            max-width: 600px;
+            padding: 10px;
+            font-size: 16px;
+            border: 3px solid black;
+            display: block;
+            text-align: left;
+            font-style: normal;
+            color: black;
+        }
+        .container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        padding: 10px;
+    }
+    
+    .product {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin: 10px;
+        display: flex;
+        align-items: center;
+        position: relative;
+        width: calc(33.33% - 20px);
+        padding: 15px;
+        transition: transform 0.3s ease;
+    }
+    
+    .product img {
+        width: 100px;
+        height: auto;
+        margin-right: 15px;
+        border-radius: 5px;
+    }
+    
+    .product .description {
+        text-align: left;
+    }
+    
+    .product:hover {
+        transform: scale(1.05);
+    }
+    
+    @media (max-width: 600px) {
+        .product {
+            flex-direction: row;
+            width: 100%;
+        }
+    
+        .product img {
+            width: 80px;
+            margin-right: 10px;
+        }
+    
+        .product .description {
+            text-align: left;
+        }
+    }
+    .product h2 {
+        font-size: 1.2em;
+        margin: 5px 0;
+    }
+    
+    .product p {
+        margin: 3px 0;
+    }
+    
+    .product:hover {
+        transform: scale(1.05);
+    }
+    
+    @media (max-width: 600px) {
+        .product {
+            flex-direction: row;
+            width: 100%;
+        }
+    
+        .product img {
+            width: 80px;
+            margin-right: 10px;
+        }
+    
+        .product .description {
+            text-align: left;
+        }
+    }
+    
+    .product h2 {
+        font-size: 1.2em;
+        margin: 5px 0;
+    }
+    
+    .product p {
+        margin: 3px 0;
+    }
+    
+    .product:hover {
+        transform: scale(1.05); /* Leve aumento no hover */
+    }
+    
+    /* Responsividade para telas menores */
+    @media (max-width: 600px) {
+        .product {
+            flex-direction: column; /* Muda para layout vertical */
+            width: 100%; /* Ocupa a largura total */
+            text-align: center; /* Centraliza o conteúdo na tela */
+        }
+    
+        .product img {
+            margin-right: 0; /* Remove o espaço lateral */
+            margin-bottom: 10px; /* Adiciona espaço abaixo da imagem */
+            width: 50%; /* Ajusta o tamanho da imagem para telas pequenas */
+        }
+    
+        .product .description {
+            text-align: center; /* Centraliza o texto */
+        }
+    }
+    .product h2 {
+        font-size: 1.2em;
+        margin: 5px 0;
+    }
+    
+    .product p {
+        margin: 3px 0;
+    }
+    
+    .product:hover {
+        transform: scale(1.05); /* Leve aumento no hover */
+    }
+    
+    /* Responsividade para telas menores */
+    @media (max-width: 600px) {
+        .product {
+            flex-direction: column; /* Muda para layout vertical */
+            width: 100%; /* Ocupa a largura total */
+            text-align: center; /* Centraliza o conteúdo na tela */
+        }
+    
+        .product img {
+            margin-right: 0; /* Remove o espaço lateral */
+            margin-bottom: 10px; /* Adiciona espaço abaixo da imagem */
+            width: 50%; /* Ajusta o tamanho da imagem para telas pequenas */
+            
+        }
+    
+        .product .description {
+            text-align: center; /* Centraliza o texto */
+        }
+    }
+    .product h2 {
+        font-size: 1.2em;
+        margin: 5px 0;
+    }
+    
+    .product p {
+        margin: 3px 0;
+    }
+    
+    .product:hover {
+        transform: scale(1.05); /* Leve aumento no hover */
+    }
+    
+    /* Ajuste para telas menores */
+    @media (max-width: 1000px) {
+        .product {
+            width: calc(50% - 20px); /* 2 produtos por linha */
+        }
+    }
+    
+    @media (max-width: 600px) {
+        .product {
+            flex-direction: column; /* Empilha imagem e descrição em telas pequenas */
+            width: 100%; /* Ocupa a largura total */
+        }
+        .product img {
+            margin-right: 0; /* Remove o espaçamento lateral */
+            margin-bottom: 10px; /* Adiciona espaço entre imagem e descrição */
+        }
+    }
+        .product-info {
+            padding: 20px;
+        }
+        .product-info h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .product-info p {
+            padding: 10px;
+        }
+        /* Estilo para a quantidade de estoque */
+    .estoque {
+    font-weight: bold;
+    }
+    
+    .estoque.altos {
+    color: green;  /* Cor verde para estoque alto */
+     }
+    
+    .estoque.medio {
+    color: orange;  /* Cor laranja para estoque médio */
+     }
+    
+      .estoque.baixo {
+     color: red;  /* Cor vermelha para estoque baixo */
+      }
+    
+      .estoque.esgotado {
+       color: gray; 
+       }
+    
+        .product-info .price {
+            font-size: 22px;
+            font-weight: bold;
+            color: red;
+            margin-bottom: 20px;
+            padding: 10px;
+        }
+        .add-to-cart:hover {
+            background-color: #d35400;
+        }
+        
+        .cart {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #f4f4f4;
+            border-radius: 10px 10px;
+            color: black;
+            padding: 30px;
+            border-radius: 10px;
+            width: 250px;
+            display: none;
+            transition: transform 0.3s ease;
+        }
+ 
+        .remove-option {
+        background-color: whitesmoke;
+        width: 80px;
+        border-radius: 10px 10px;
+        padding: 5px;
+        font-style: oblique;
+        color: white;
+        font-size: 16px;
+        text-decoration: underline;
+}
+        .cart.open {
+            display: block;
+            transform: translateX(0);
+        }
+        .cart h3 {
+            margin-bottom: 10px;
+            color: red;
+            font-size: 20px;
+            font-style: oblique;
+        }
+        .cart ul {
+            list-style: none;
+            margin-bottom: 10px;
+            padding-left: 0;
+        }
+        .cart ul li {
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .cart ul li .price {
+            font-size: 16px;
+            font-weight: bold;
+            color: red;
+            margin-top: 5px;
+        }
+        .cart button {
+            background-color:black;
+            color: white;
+            border: none;
+            padding: 2px;
+            width: 200px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 10px 10px;
+        }
+        .cart button:hover {
+            background-color: red;
+        }
+        .cart:hover{transition: ease s;transform: scale(1.03);}
+        .view-cart-btn {
+            position: fixed; /* Fixado na tela */
+            top: 0px; /* Afastado 20px do topo */
+            left: 10px; /* Afastado 20px da esquerda */
+            background-color: darkblue;
+            border-radius: 10px 10px;
+            color: white;
+            padding: 0px;
+            border: 3px solid white;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            z-index: 1000; /* Garante que o botão fique acima de outros elementos */
+        }
+        .view-cart-btn:hover {
+            background-color: #2980b9;
+        }
+    
+        .remove-option {
+            color:red;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: underline;
+        }
+    
+        footer {
+            background-color:darkblue;
+            border-radius: 10px 10px;box-shadow: 3px 3px 3px black;
+            color: black;
+            padding: 20px;
+            width: 100%;
+            text-align: center;
+            margin-top: auto;
+            
+        }
+        .footer:hover{transform: scale(1.01);}
+        .img:hover{transform: scale(1.07);}
+        .row{display: flex;flex-direction: row;align-items: center;justify-content: center;text-align: center;margin: auto;gap: 5px;padding: 10px;width: 200px;}
+        footer h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        footer p {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        footer a {
+            color: #ecf0f1;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 1000%) {
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+    }
+    
+    </style>
+<body>
+     <!-- Cabeçalho -->
+    <header style="background-color: black;border-radius: 10px 10px;">
+        <h1 style="color: red;text-shadow:9px;font-style: inherit;font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;"><big>Game Shark</big></h1>
+    </header>
+    <br>
+    <!-- Menu de Categorias -->
+    <div class="categories">
+        <button onclick="selectCategory('Consoles')">Consoles</button>
+        <button onclick="selectCategory('Jogos')">Jogos</button>
+        <button onclick="selectCategory('Acessórios')">Acessórios</button>
+    </div>
+
+    <!-- Barra de Pesquisa -->
+    <input type="text" id="search-bar" placeholder="Pesquisar produtos..." onkeyup="searchProducts()">
+
+    <!-- Contêiner de Produtos -->
+    <div class="container" id="product-container">
+        <!-- Os produtos serão renderizados aqui -->
+    </div>
+
+    <!-- Botão do Carrinho -->
+<button class="view-cart-btn" onclick="toggleCart()">
+    <div class="img">
+        <img src="OIP.jpg" alt="" width="60px" height="30px" max-width="100%" height="auto">
+    </div>
+</button>
+
+<!-- Carrinho -->
+<div class="cart" id="cart">
+    <h3>Carrinho <img src="Cart.jpg" alt="Carrinho" style="height: 40px;width: 50px;border-radius: 10px;"></h3>
+    
+    <ul id="cart-items">
+        <li>Nenhum item no carrinho</li>
+    </ul>
+    <p style="color: black;">Total: R$<span id="cart-total" style="color: red"> 0.00</span></p>
+    <!-- Exibir botão de finalização de compra apenas se houver itens no carrinho -->
+    <br>
+    <button id="checkout-btn" target.href='_blank' onclick="window.location.href = 'formpamento.html';" style="display: none;">Finalizar Compra</button>
+</div>
+
+
+    <!-- Rodapé -->
+     <div class="footer">
+    <footer>
+        <h3 style="color:white;text-shadow:9x;">Endereço</h3>
+        <br>
+        <p style="color:white;text-shadow:9x;">Av Rio das Pedras Nº 4100</p>
+        <br>
+        <h3 style="color:white;text-shadow:9x;">Entre em Contato</h3>
+        <div class="row">
+            <div class="img">
+                <p>
+                    <img src="gmail.png" alt="Gmail" style="width: 40px;height: 30px;cursor:pointer;">
+                    <a href="https://www.guilherme8876sk@gmail.com">Gmail</a>
+                </p>
+            </div>    
+            <div class="img">
+                <p>
+                    <img src="whatsapp.png" alt="WhatsApp" style="width: 40px;height: 30px;cursor:pointer;border-radius: 10px;">
+                    <a href="https://wa.me/5511983417590">WhatsApp</a>
+                </p>
+            </div>
+            <div class="img">
+                <p>
+                    <img src="telefone.jpg" alt="Telefone" style="width: 40px;height: 30px;cursor:pointer;border-radius: 10px;">
+                    <a href="https:/wa.me/11983417590">Telefone</a>
+                </p>
+            </div>
+        </div>
+        <p style="color:white;text-shadow:9px;">&copy; Game Shark. Todos os direitos reservados.</p>
+    </footer>
+    </div>
+    
+    <script>
+    const products = [
+    { id: 1, name: 'Playstation 5', description: 'Console de ultima gereção com ótimos gráficos e desempenhos', price: 3000, image: 'PS5.jpg', estoque: 40, category: 'Consoles' },
+    { id: 2, name: 'Playstation 4 PRO', description: '1TB de Armazenamento Interno, processador ultra rápido', price: 2400, image: 'ps4.png', estoque: 50, category: 'Consoles' },
+    { id: 3, name: 'Playstation 3', description: 'Um clássico com ótimos jogos e desempenho', price: 1700, image: 'Ps3.webp', estoque: 60, category: 'Consoles' },
+    { id: 4, name: 'Playstation 2', description: 'Clássico com uma vasta biblioteca', price: 1300, image: 'PS2.jpg', estoque: 40, category: 'Consoles' },
+    { id: 5, name: 'Playstation One', description: 'Um Antigo que desperta nostalgia', price: 1200, image: 'Ps1.jpg', estoque: 1200, category: 'Consoles' },
+    { id: 6, name: 'Xbox', description: 'O clássico que funciona', price: 3000, image: 'Xbox.png', estoque: 20, category: 'Consoles' },
+    { id: 7, name: 'Xbox 360', description: 'Destravado com 4gb de armazenamento', price: 2000, image: 'Xbox 360.jpg', estoque: 20, category: 'Consoles' },
+    { id: 8, name: 'Xbox One X', description: '4k Nativo processador rápido', price: 3000, image: 'xbox one x.jpg', estoque: 30, category: 'Consoles' },
+    { id: 9, name: 'Xbox Series X', description: 'Console de ultima gereção com processador ultra rápido', price: 3200, image: 'Xbox s x.webp', estoque: 60, category: 'materiais' },
+];
+
+const categories = ['Console', 'Jogos', 'Acessorios'];
+let cart = [];
+let selectedCategory = 'none'; // Categoria inicial
+
+// Função para trocar a categoria
+function selectCategory(category) {
+    selectedCategory = category;
+    renderProductsByCategory(); // Re-renderiza os produtos da nova categoria
+}
+// Função para adicionar ao carrinho
+function addToCart(event, productId, productName, price) {
+    event.preventDefault();
+
+    const product = products.find(item => item.id === productId);
+
+    if (!product || product.estoque <= 0) {
+        alert(`Não há mais estoque de ${productName}`);
+        return;
+    }
+
+    const existingProduct = cart.find(item => item.id === productId);
+
+    if (existingProduct) {
+        existingProduct.quantity++;
+    } else {
+        cart.push({ id: productId, name: productName, price: price, quantity: 1 });
+    }
+
+    product.estoque--;
+    updateCart();
+    renderProductsByCategory(); // Atualiza os produtos da categoria selecionada
+
+    // Salva no localStorage
+    localStorage.setItem('cart', JSON.stringify(cart));
+
+    // O carrinho fica aberto após adicionar o item
+    openCart();
+}
+
+// Função para remover do carrinho
+function removeFromCart(productId) {
+    const productInCart = cart.find(item => item.id === productId);
+    const product = products.find(item => item.id === productId);
+
+    if (productInCart) {
+        if (productInCart.quantity > 1) {
+            productInCart.quantity--;
+        } else {
+            cart = cart.filter(item => item.id !== productId);
+        }
+
+        product.estoque++;
+        updateCart();
+        renderProductsByCategory(); // Re-renderiza os produtos após alteração no carrinho
+    }
+
+    // Atualiza o localStorage
+    localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+
+// Função para atualizar o carrinho
+function updateCart() {
+    const cartItems = document.getElementById('cart-items');
+    const cartTotal = document.getElementById('cart-total');
+    const checkoutBtn = document.getElementById('checkout-btn');
+
+    // Limpar a lista de itens no carrinho
+    cartItems.innerHTML = '';
+
+    let total = 0;
+    cart.forEach(item => {
+        const listItem = document.createElement('li');
+        listItem.innerHTML = `${item.name} - R$ ${item.price.toFixed(2)} x ${item.quantity} 
+        <span class="remove-option" onclick="removeFromCart(${item.id})">Remover</span>`;
+        cartItems.appendChild(listItem);
+        total += item.price * item.quantity;
+    });
+
+    // Atualizar o total
+    cartTotal.textContent = total.toFixed(2);
+
+    // Exibir ou esconder o botão de finalização de compra
+    checkoutBtn.style.display = cart.length > 0 ? 'block' : 'none';
+}
+
+// Função para abrir o carrinho (fica visível o tempo todo)
+function openCart() {
+    const cartContainer = document.getElementById('cart');
+    cartContainer.classList.add('open'); // Sempre adiciona a classe "open"
+}
+
+// Função para pesquisa de produtos
+function searchProducts() {
+    const query = document.getElementById('search-bar').value.toLowerCase();
+    const filteredProducts = products.filter(product => 
+        product.name.toLowerCase().includes(query) || 
+        product.description.toLowerCase().includes(query)
+    );
+    renderProducts(filteredProducts);
+}
+
+// Função para renderizar os produtos da categoria atual
+function renderProductsByCategory() {
+    renderProducts(products.filter(product => product.category === selectedCategory));
+}
+
+// Função para renderizar os produtos
+function renderProducts(filteredProducts) {
+    const container = document.getElementById('product-container');
+    container.innerHTML = '';
+
+    if (filteredProducts.length === 0) {
+        container.innerHTML = '<p>Nenhum produto encontrado para esta categoria.</p>';
+    } else {
+        filteredProducts.forEach(product => {
+            let estoqueClass = 'estoque';
+            if (product.estoque === 0) {
+                estoqueClass += ' esgotado';
+            } else if (product.estoque <= 10) {
+                estoqueClass += ' baixo';
+            } else if (product.estoque <= 50) {
+                estoqueClass += ' medio';
+            } else {
+                estoqueClass += ' alto';
+            }
+
+            const productElement = document.createElement('div');
+            productElement.classList.add('product');
+            productElement.innerHTML = `
+                <img src="${product.image}" alt="${product.name}">
+                <div class="product-info">
+                    <h3>${product.name}</h3>
+                    <p>${product.description}</p>
+                    <p class="${estoqueClass}">Estoque: ${product.estoque}</p>
+                    <p class="price">R$ ${product.price.toFixed(2)}</p>
+                    <button type="button" class="add-to-cart" onclick="addToCart(event, ${product.id}, '${product.name}', ${product.price})" ${product.estoque <= 0 ? 'disabled' : ''}>
+                        Adicionar ao carrinho
+                    </button>
+                </div>
+            `;
+            container.appendChild(productElement);
+        });
+    }
+}
+
+// Função para redirecionar para a página de pagamento
+function redirectToPayment() {
+    if (cart.length === 0) {
+        alert('Seu carrinho está vazio. Adicione itens para continuar.');
+        return;
+    }
+    // Redireciona para o formulário de pagamento
+    window.location.href = 'formpagamento.html';
+}
+
+// Inicializa a renderização dos produtos da categoria inicial
+renderProductsByCategory();
+
+// Adiciona evento para finalizar compra (redirecionamento)
+document.getElementById('checkout-btn').addEventListener('click', redirectToPayment);
+    </script>
+</body>
+</html>

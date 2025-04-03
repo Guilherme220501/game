@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento com Stripe</title>
+    <style>
+        /* Reset básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right,red,black,red);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        h2 {
+            color: black;
+            text-align: center;
+            padding: 5px;
+        }
+        h3{text-align: left;}
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-section {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: red;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-size: 20px;
+            padding: 9px;
+            text-align: left;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border-radius: 6px;
+            border: 2px solid #ccc;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, select:focus, button:focus {
+            border-color: #4CAF50;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: #fff;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .product-list {
+            margin-bottom: 30px;
+        }
+
+        .product-list ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .product-list li {
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .price {
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        #loading {
+            display: none;
+            font-weight: bold;
+            color: #f57c00;
+        }
+
+        #pix-info {
+            background-color: #f1f1f1;
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 20px;
+            display: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #pay-pix {
+            background-color: #ff9800;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        #pay-pix:hover {
+            background-color: #fb8c00;
+        }
+
+        .no-download { -webkit-touch-callout: none; /* iOS Safari */ -webkit-user-select: none; /* Safari */ -khtml-user-select: none; /* Konqueror HTML */ -moz-user-select: none; /* Firefox */ -ms-user-select: none; /* Internet Explorer/Edge */ user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */ }
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            button, #pay-pix {
+                font-size: 14px;
+            }
+        }
+
+
+        #pix-qr-code canvas {
+            display: block;
+            margin: 0 auto; /* Centraliza horizontalmente */
+            max-width: 90%;
+            max-height: 90%;
+        }
+    
+        .contato{margin: auto;width: 40px;display: flex;flex-direction: row;align-items: center;gap: 8px;padding: 10px;justify-content: center;text-align: center;cursor: grabbing;text-decoration: none;text-shadow: 9px;}
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Cadastro para Envio</h2>
+        <form id="user-form">
+            <div class="form-section">
+                <label for="name">Nome Completo:</label>
+                <input type="text" id="name" name="name" required placeholder="Digite seu nome completo">
+            </div>
+
+            <div class="form-section">
+                <label for="email">E-mail:</label>
+                <input type="email" id="email" name="email" required placeholder="Digite seu e-mail">
+            </div>
+
+            <div class="form-section">
+                <label for="address">Endereço:</label>
+                <input type="text" id="address" name="address" required placeholder="Digite seu endereço">
+            </div>
+
+            <div class="form-section">
+                <label for="city">Cidade:</label>
+                <input type="text" id="city" name="city" required placeholder="Digite sua cidade" >
+            </div>
+
+            <div class="form-section">
+                <label for="Cep">Cep:</label>
+                <input type="text" name="cep" id="cep" placeholder="Digite seu Cep" required>
+            </div>
+            <div class="form-section">
+                <label for="Numero residencial">Numero residencial:</label>
+                <input type="number" placeholder="Digite numero da sua residencia" name="residencia" id="residencia" required>
+            </div>
+            <div class="form-section">
+                <label for="state">Estado:</label>
+                <select id="state" name="state" required>
+                    <option value="SP">São Paulo</option>
+                    <option value="RJ">Rio de Janeiro</option>
+                    <option value="MG">Minas Gerais</option>
+                    <option value="BA">Bahia</option>
+                    <option value="PR">Paraná</option>
+                    <option value="RS">Rio Grande do Sul</option>
+                </select>
+            </div>
+
+            <button type="submit" style="background-color: blue;">Cadastrar Dados para Envio</button>
+        </form>
+    </div>
+    <br>
+    <div class="container">
+        <h2 style="color: red;">Resumo da Compra</h2>
+        <div class="product-list">
+            <h3>Itens no carrinho:</h3>
+            <ul id="cart-items">
+                <!-- Itens do carrinho serão carregados aqui -->
+            </ul>
+            <p id="cart-total">Total: R$ 0.00</p>
+        </div>
+    </div>
+    <br>
+    <div class="container">
+        <h2>Escolha sua forma de pagamento</h2>
+        <br>
+        <form id="payment-form">
+            <div id="card-element">
+                <!-- Stripe Card Element será inserido aqui -->
+            </div>
+            <br>
+            <button type="submit">Pagar com Cartão de Crédito</button>
+        </form>
+        </div>
+            <br>
+            <div class="container">
+                <h3 style="text-align: center;">Ou pague via PIX</h3>
+                <br>
+                <!-- Botão para pagar com PIX -->
+                <button id="pay-pix" onclick="togglePaymentInfo('pix-info', 'pay-pix')">Pagar com PIX</button>
+                <div id="pix-info" style="display: none;">
+                    <p style="word-wrap: break-word;">
+                        Faça o pagamento total selecionado no Carrinho para a <b style="color: black;text-shadow: 9px;">Chave PIX</b>: 
+                        <e-mail><strong>guilherme8876sk@gmail.com</strong></e-mail>
+                    </p>
+                </div>
+            </div>
+            <br>
+            
+            <div class="container">
+                <h3 style="text-align: center;">Pague via QRcode</h3>
+                <br>
+                <!-- Botão para pagar com QR Code -->
+                <button id="pay-qrcode" onclick="togglePaymentInfo('qrcode-info', 'pay-qrcode')" style="background-color: blue;color: white;">Pagar com QR Code</button>
+                <div id="qrcode-info" style="display: none;">
+                    <div class="no-download">
+                        <img src="QR.code.jpg" alt="QR Code" ondragstart="return false;" oncontextmenu="return false;" class="no-download" width="200px" height="200px" style="text-align:center">
+                    </div>
+                </div>
+            </div>     
+            <br>
+            <div class="container">
+                <h3 style="text-align: center;">Ou Br Code PIX (copia e cola)</h3>
+                <br>
+                <!-- Botão para pagar com Br Code PIX -->
+                <button id="pay-brcode" onclick="togglePaymentInfo('brcode-info', 'pay-brcode')" style="background-color: blueviolet;">Pagar com Br Code PIX</button>
+                <div id="brcode-info" style="display: none;">
+                    <p style="word-wrap: break-word;font-style: oblique;">
+                        00020126470014BR.GOV.BCB.PIX0125GUILHERME8876SK@GMAIL.COM5204000053039865802BR5923Guilherme Barbosa Silva6009Sao Paulo610803936-00062070503***630465A2
+                    </p>
+                </div>
+            </div>
+            <br>
+            <div class="container">
+            <p style="font-style: oblique;"><em style="text-shadow: 9px;">Após realizar o pagamento, envie o comprovante para confirmação.</em></p>
+            <br>
+            <div class="contato">
+            <p>
+            <img src="gmail.png" alt="icon" style="width: 45px; height: 40px;border-radius: 10px 10px;margin: auto;"><a href="https://www.guilherme8876sk@gmail.com" target="_blank" rel="external"  style="text-decoration: none;">Gmail</a></p>
+            <br>
+            <p>
+            <img src="whatsapp.png" alt="icon" style="width: 40px; height: 40px;border-radius: 10px 10px;margin: auto;"><a href="https://wa.me/5511983417590" target="_blank" rel="external" style="text-decoration: none;">WhatsApp</a></p>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script src="https://js.stripe.com/v3/"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
+<script>
+    document.addEventListener('contextmenu', function(e) {
+        if (e.target.tagName === 'IMG') {
+            e.preventDefault();
+        }
+    });
+</script>
+<script>
+    let cart = [];
+
+    // Função para carregar o carrinho do localStorage
+    function loadCart() {
+        const storedCart = localStorage.getItem('cart');
+        if (storedCart) {
+            cart = JSON.parse(storedCart);
+            updateCart();
+        }
+    }
+
+    // Função para atualizar o carrinho
+    function updateCart() {
+        const cartItemsContainer = document.getElementById('cart-items');
+        const cartTotal = document.getElementById('cart-total');
+        cartItemsContainer.innerHTML = '';
+
+        cart.forEach(item => {
+            const cartItemElement = document.createElement('li');
+            cartItemElement.innerHTML = `${item.name} - R$ ${item.price.toFixed(2)} x ${item.quantity}
+                <span class="remove-option" onclick="removeFromCart(${item.id})">Remover</span>`;
+            cartItemsContainer.appendChild(cartItemElement);
+        });
+
+        const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+        cartTotal.textContent = `Total: R$ ${total.toFixed(2)}`;
+    }
+
+    // Função para remover produto do carrinho
+    function removeFromCart(productId) {
+        const productIndex = cart.findIndex(item => item.id === productId);
+
+        if (productIndex > -1) {
+            if (cart[productIndex].quantity > 1) {
+                cart[productIndex].quantity -= 1;
+            } else {
+                cart.splice(productIndex, 1);
+            }
+        }
+
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCart();
+    }
+
+    // Stripe
+    const stripe = Stripe('pk_live_51QeJJaEXQPnn4WV6kDkm9Fghh1ysoNdNNfz6ggDt78BLa3D6wSmHPrOvygIQWKpxTFzhGoXtjCURJSB9FA9eZSiv00dxR7roUM');
+    const elements = stripe.elements();
+    const card = elements.create('card');
+    card.mount('#card-element');
+
+    const paymentForm = document.getElementById('payment-form');
+    paymentForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        // Calcular o valor total sem desconto
+        const totalAmount = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+        const amountInCents = totalAmount * 100; // Converte para centavos
+
+        const { paymentMethod, error } = await stripe.createPaymentMethod({
+            type: 'card',
+            card: card,
+        });
+
+        if (error) {
+            alert('Erro no pagamento: ' + error.message);
+        } else {
+            // Enviar o valor ao backend
+            const response = await fetch('/api/pagamento', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    paymentMethodId: paymentMethod.id,
+                    amount: amountInCents, // Enviar o valor total
+                    items: cart, // Enviar os itens do carrinho
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                alert('Pagamento realizado com sucesso!');
+            } else {
+                alert('Erro: ' + result.error);
+            }
+        }
+    });
+
+    // Função para alternar a exibição das informações de pagamento e esconder o botão
+    function togglePaymentInfo(infoId, buttonId) {
+        const paymentInfo = document.getElementById(infoId);
+        const button = document.getElementById(buttonId);
+        
+        // Alternar entre exibir e ocultar as informações
+        if (paymentInfo.style.display === "none") {
+            paymentInfo.style.display = "block";
+            // Esconder o botão
+            button.style.display = "none";
+        } else {
+            paymentInfo.style.display = "none";
+            // Mostrar o botão novamente (opcional)
+            // button.style.display = "block"; // Caso queira que o botão reapareça, descomente esta linha
+        }
+    }
+    // Função para calcular o valor total do carrinho
+    function calcularTotalCarrinho() {
+        return cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    }
+
+    const qrcode = window.QRCode;
+
+
+    // Carregar o carrinho ao carregar a página
+    loadCart();
+
+document.getElementById('pay-qrcode').addEventListener('click', async () => {
+    const total = calcularTotalCarrinho();
+    const response = await fetch('/api/gerar-pix', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+            amount: total * 100, // Converter para centavos
+            key: 'guilherme8876sk@gmail.com', // Chave PIX
+        }),
+    });
+
+    const data = await response.json();
+    if (data.qrCode) {
+        const qrcodeDiv = document.getElementById('qrcode-info');
+        qrcodeDiv.innerHTML = `<img src="${data.qrCode}" alt="QR Code PIX" width="200px" height="200px">`;
+        qrcodeDiv.style.display = "block";
+    } else {
+        alert('Erro ao gerar QR Code PIX.');
+    }
+});
+</script>
+
+</body>
+</html>
